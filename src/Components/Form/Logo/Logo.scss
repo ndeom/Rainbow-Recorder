@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
+.form-logo-container {
+    display: flex;
+
+    .form-logo {
+        font-size: 28px;
+        font-family: "Lobster", cursive;
+        margin-right: 8px;
+    }
+
+    .form-rainbow {
+        width: 32px;
+        height: auto;
+    }
+}
