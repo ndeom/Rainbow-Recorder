@@ -1,41 +1,82 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { SessionContext } from "Components/SessionContext";
 import Map from "Components/Map/Map";
 import SideBar from "Components/SideBar/SideBar";
 import MapHeader from "Components/MapHeader/MapHeader";
+import IOSSpinner from "Components/Spinner/IOSSpinner";
+import { PostModal } from "Components/Post/Post";
 import { fetchPostsInBounds } from "utils/helperfuncs";
 import { ReactComponent as ImageIcon } from "Images/image.svg";
-import { submitImage } from "utils/helperfuncs";
+import { submitPost, signInFromSession } from "utils/helperfuncs";
 import "./MapRoute.scss";
 
 export default function MapRoute() {
-    const { session, isAuthenticated } = useContext(SessionContext);
-    const [markers, setMarkers] = useState();
-    const [userMarker, setUserMarker] = useState();
-    const [highlightedIndex, setHighlightedIndex] = useState(null);
+    const { session } = useContext(SessionContext);
 
-    const [posts, setPosts] = useState(defaultPosts); // posts need to replace markers
+    const [userMarker, setUserMarker] = useState(null);
+
     const [mapBounds, setMapBounds] = useState({});
 
     const [modalToggled, setModalToggled] = useState(false);
 
-    useEffect(() => {
-        // Only attempts to fetch posts if Google script has been
-        // added to the document from Map.js
-        if (window.google) {
-            console.log("mapBounds: ", mapBounds);
-            const handleBoundChange = async () => {
-                try {
-                    const posts = await fetchPostsInBounds(mapBounds);
-                    // Move default posts to database
-                    setPosts([...posts, ...defaultPosts]);
-                } catch (err) {
-                    console.error(`Error ocurred while fetching posts: ${err}`);
-                }
-            };
-            handleBoundChange();
+    const [rainbowButtonToggled, setRainbowButtonToggled] = useState(false);
+
+    const [postsLoading, setPostsLoading] = useState(true); // set to true to prevent error message from showing up
+    const [posts, setPosts] = useState([]);
+    const [postIds] = useState(() => new Set());
+    const [expandedPost, setExpandedPost] = useState(null);
+
+    const [markers, setMarkers] = useState([]);
+    const [replaceMarkers, setReplaceMarkers] = useState(false);
+    const [selectedMarker, setSelectedMarker] = useState(null); // may want to reference id instead of object
+    const selectedPostRef = useRef();
+
+    const handleBoundChange = useCallback(async () => {
+        try {
+            let response = await fetchPostsInBounds(mapBounds);
+            console.log("posts fetched");
+            if (response.status === 401) {
+                await signInFromSession();
+                response = await fetchPostsInBounds(mapBounds);
+            }
+            const fetchedPosts = await response.json();
+            return fetchedPosts;
+        } catch (err) {
+            console.error(`Error ocurred while fetching posts: ${err}`);
         }
     }, [mapBounds]);
+
+    useEffect(() => {
+        if (window.google) {
+            handleBoundChange()
+                .then((fetchedPosts) => {
+                    if (fetchedPosts && fetchedPosts.posts.length) {
+                        if (posts.length) {
+                            for (let post of fetchedPosts.posts) {
+                                if (
+                                    !postIds.has(post.post_id) ||
+                                    posts.length !== fetchedPosts.posts.length
+                                ) {
+                                    postIds.clear();
+                                    for (let post of fetchedPosts.posts) postIds.add(post.post_id);
+                                    setPostsLoading(true);
+                                    setReplaceMarkers(true);
+                                    setPosts(fetchedPosts.posts);
+                                    break;
+                                }
+                            }
+                        } else {
+                            setPostsLoading(true);
+                            setPosts(fetchedPosts.posts);
+                        }
+                    } else {
+                        setPosts([]);
+                    }
+                })
+                .catch((err) => console.error("Error while fetching posts: ", err))
+                .finally(() => setTimeout(() => setPostsLoading(false), 1000));
+        }
+    }, [handleBoundChange, mapBounds, postIds, posts.length]);
 
     return (
         <div id="map-route">
@@ -43,39 +84,97 @@ export default function MapRoute() {
             <div id="map-route-body">
                 <Map
                     {...mapProps}
-                    markers={markers}
-                    setMarkers={setMarkers}
                     userMarker={userMarker}
                     setUserMarker={setUserMarker}
-                    highlightedIndex={highlightedIndex}
                     mapBounds={mapBounds}
                     setMapBounds={setMapBounds}
                     modalToggled={modalToggled}
                     setModalToggled={setModalToggled}
+                    posts={posts}
+                    rainbowButtonToggled={rainbowButtonToggled}
+                    setRainbowButtonToggled={setRainbowButtonToggled}
+                    selectedMarker={selectedMarker}
+                    setSelectedMarker={setSelectedMarker}
+                    markers={markers}
+                    setMarkers={setMarkers}
+                    replaceMarkers={replaceMarkers}
+                    setReplaceMarkers={setReplaceMarkers}
                 />
                 <SideBar
-                    markers={markers}
                     posts={posts}
-                    highlightedIndex={highlightedIndex}
-                    setHighlightedIndex={setHighlightedIndex}
+                    postsLoading={postsLoading}
+                    setExpandedPost={setExpandedPost}
+                    selectedMarker={selectedMarker}
+                    selectedPostRef={selectedPostRef}
                 />
             </div>
-            {modalToggled ? <UploadModal setModalToggled={setModalToggled} /> : null}
+            {modalToggled ? (
+                <UploadModal
+                    setModalToggled={setModalToggled}
+                    handleBoundChange={handleBoundChange}
+                    userMarker={userMarker}
+                    setUserMarker={setUserMarker}
+                    setRainbowButtonToggled={setRainbowButtonToggled}
+                />
+            ) : null}
+            {expandedPost ? (
+                <PostModal post={expandedPost} setExpandedPost={setExpandedPost} />
+            ) : null}
         </div>
     );
 }
 
-function UploadModal({ setModalToggled }) {
+function UploadModal({
+    setModalToggled,
+    handleBoundChange,
+    userMarker,
+    setUserMarker,
+    setRainbowButtonToggled,
+}) {
+    const fileSubmitRef = useRef({});
+    const captionRef = useRef("");
+
     const [dragOver, setDragOver] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState("");
+    const [image, setImage] = useState(null);
+    const [submissionError, setSubmissionError] = useState(false);
 
-    const readFile = (file) => {
+    const { session } = useContext(SessionContext);
+
+    const handleSubmit = async () => {
+        try {
+            if (submissionError) setSubmissionError(false);
+            setLoading(true);
+            userMarker.setDraggable(false);
+            const post = {
+                userID: session.user_id,
+                username: session.username,
+                timestamp: new Date(Date.now()), // could probably change to just new Date()
+                image: image,
+                caption: captionRef.current,
+                location: {
+                    lat: userMarker.getPosition().lat(),
+                    lng: userMarker.getPosition().lng(),
+                },
+            };
+            const responseBody = await submitPost(post);
+            if (responseBody.error) {
+                setSubmissionError(true);
+                setLoading(false);
+            } else {
+                setUserMarker(null);
+                setModalToggled(false);
+                setRainbowButtonToggled(false);
+                handleBoundChange();
+            }
+        } catch (err) {
+            console.error("Error while submitting post: ", err);
+        }
+    };
+
+    const readAndStoreFile = (file) => {
         const reader = new FileReader();
-        reader.onloadend = () => {
-            console.log("file read");
-            setImageUrl(reader.result);
-        };
+        reader.onloadend = () => setImage(reader.result);
         reader.readAsDataURL(file);
     };
 
@@ -90,7 +189,7 @@ function UploadModal({ setModalToggled }) {
         event.stopPropagation();
         if (event.dataTransfer.files && event.dataTransfer.files.length) {
             const file = event.dataTransfer.files[0];
-            readFile(file);
+            readAndStoreFile(file);
             event.dataTransfer.clearData();
         }
     };
@@ -101,66 +200,129 @@ function UploadModal({ setModalToggled }) {
         setDragOver(false);
     };
 
+    const handleFileSubmit = () => {
+        const file = fileSubmitRef.current.files[0];
+        readAndStoreFile(file);
+    };
+
     return (
-        <div id="dark-background">
+        <div id="upload-container">
+            <div className="dark-background" onClick={() => setModalToggled(false)}></div>
             <div id="upload-modal">
-                <div id="modal-close-container">
-                    <button id="modal-close" onClick={() => setModalToggled(false)}>
-                        &#10006;
-                    </button>
-                </div>
-                {imageUrl.length ? (
-                    <>
-                        <div id="submitted-image">
-                            <img alt="User submitted" src={imageUrl}></img>
+                <ModalNav
+                    image={image}
+                    setImage={setImage}
+                    setModalToggled={setModalToggled}
+                    handleSubmit={handleSubmit}
+                />
+                {image ? (
+                    loading ? (
+                        <div id="spinner-backdrop">
+                            <span>Uploading...</span>
+                            <IOSSpinner />
                         </div>
-                        <div id="post-inputs">
-                            <label htmlFor="caption">
-                                <span id="caption-placeholder">Add a caption...</span>
-                                <textarea id="caption" name="caption" />
-                            </label>
-                        </div>
-                    </>
+                    ) : (
+                        <ImagePreviewModal
+                            image={image}
+                            submissionError={submissionError}
+                            handleSubmit={handleSubmit}
+                            captionRef={captionRef}
+                        />
+                    )
                 ) : (
-                    <>
-                        <div
-                            id="modal-drop"
-                            onDragOver={(e) => handleDragOver(e)}
-                            onDragLeave={(e) => handleDragLeave(e)}
-                            onDrop={(e) => handleDrop(e)}
-                        >
-                            <div id="modal-drop-label" className={`${dragOver ? "active" : ""}`}>
-                                Drop images here
-                            </div>
-                        </div>
-                        <div id="modal-actions">
-                            <input
-                                id="file-input"
-                                type="file"
-                                name="files"
-                                multiple=""
-                                accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.xcf,.webp,.mp4,.mov,.avi,.webm,.mpeg,.flv,.mkv,.mpv,.wmv"
-                            ></input>
-                            <label htmlFor="file-input">
-                                <ImageIcon />
-                                Choose Photo
-                            </label>
-                            {/* <div id="modal-divider">or</div>
-                    <div id="modal-text-picker">
-                        <label id="modal-paste-label" htmlFor="paste-input">
-                            <span>Paste image or URL</span>
-                            <input
-                                id="modal-paste-input"
-                                name="paste-input"
-                                placeholder="Paste image or URL"
-                            ></input>
-                        </label>
-                    </div> */}
-                        </div>
-                    </>
+                    <ImageSubmitModal
+                        handleDragOver={handleDragOver}
+                        handleDragLeave={handleDragLeave}
+                        handleDrop={handleDrop}
+                        dragOver={dragOver}
+                        fileSubmitRef={fileSubmitRef}
+                        handleFileSubmit={handleFileSubmit}
+                    />
                 )}
             </div>
         </div>
+    );
+}
+
+function ModalNav({ image, setImage, setModalToggled, handleSubmit }) {
+    const handleClickBack = () => (image ? setImage(null) : setModalToggled(false));
+    const handleClickNext = () => image && handleSubmit();
+    return (
+        <div id="modal-nav">
+            <button id="back-button" onClick={handleClickBack}>
+                {image ? "Back" : "Exit"}
+            </button>
+            <button id="next-button" onClick={handleClickNext}>
+                {image ? "Post" : ""}
+            </button>
+        </div>
+    );
+}
+
+function ImagePreviewModal({ image, submissionError, captionRef }) {
+    return (
+        <>
+            <div id="submitted-image-container">
+                <img id="submitted-image" alt="User submitted" src={image} />
+            </div>
+            {submissionError ? <PostSubmissionError /> : null}
+            <div id="post-inputs">
+                <textarea
+                    id="caption"
+                    name="caption"
+                    placeholder="Write a caption..."
+                    onChange={(e) => (captionRef.current = e.target.value)}
+                />
+            </div>
+        </>
+    );
+}
+
+function PostSubmissionError() {
+    return (
+        <div id="post-submission-error">
+            There was an issue while trying to upload your post. Either try again or come back
+            later.
+        </div>
+    );
+}
+
+function ImageSubmitModal({
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+    dragOver,
+    fileSubmitRef,
+    handleFileSubmit,
+}) {
+    return (
+        <>
+            <div
+                id="modal-drop"
+                onDragOver={(e) => handleDragOver(e)}
+                onDragLeave={(e) => handleDragLeave(e)}
+                onDrop={(e) => handleDrop(e)}
+            >
+                <div id="modal-drop-label" className={`${dragOver ? "active" : ""}`}>
+                    Drop images here
+                </div>
+            </div>
+            <div id="modal-actions">
+                <input
+                    ref={fileSubmitRef}
+                    id="file-input"
+                    type="file"
+                    name="files"
+                    multiple=""
+                    accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.xcf,.webp,.mp4,.mov,.avi,.webm,.mpeg,.flv,.mkv,.mpv,.wmv"
+                    onChange={handleFileSubmit}
+                ></input>
+                <label htmlFor="file-input">
+                    <ImageIcon />
+                    Choose Photo
+                </label>
+            </div>
+        </>
     );
 }
 

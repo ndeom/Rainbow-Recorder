@@ -8,39 +8,30 @@ import FormButton from "Components/Form/Button/Button";
 import RainbowBackground from "Components/RainbowBackground/RainbowBackground";
 import { Link } from "react-router-dom";
 import { signIn, setSessionCookie } from "utils/helperfuncs";
-import "./Login.scss";
+// import "./Login.scss";
+import "./LoginAlt.scss";
 
 const testDelay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 export default function Login() {
-    const usernameRef = useRef("");
-    const passwordRef = useRef("");
+    // const usernameRef = useRef("");
+    // const passwordRef = useRef("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [submissionError, setSubmissionError] = useState("");
-    const history = useHistory();
-    const { setIsAuthenticated } = useContext(SessionContext);
+    const { logIn } = useContext(SessionContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
-
-        const credentials = {
-            username: usernameRef.current,
-            password: passwordRef.current,
-        };
-
+        const credentials = { username, password };
         try {
             const responseBody = await signIn(credentials);
-            setLoading(false);
-            if (responseBody.error) {
-                setSubmissionError(responseBody.error);
-            } else {
-                setSessionCookie();
-                setIsAuthenticated(true);
-                history.push("/rainbow");
-            }
+            responseBody.error === undefined ? logIn() : setSubmissionError(responseBody.error);
         } catch (err) {
             console.error(`Attempted to submit form data and got error: ${err}`);
+        } finally {
             setLoading(false);
         }
     };
@@ -55,17 +46,21 @@ export default function Login() {
     }, [formComplete, passwordComplete, usernameComplete]);
 
     return (
-        <div id="login">
+        <div id="login" className="login">
             <div className="form-container" onSubmit={(e) => handleSubmit(e)}>
                 <Logo />
                 <form id="login-form">
                     <Username
-                        usernameRef={usernameRef}
+                        // usernameRef={usernameRef}
+                        username={username}
+                        setUsername={setUsername}
                         usernameComplete={usernameComplete}
                         setUsernameComplete={setUsernameComplete}
                     />
                     <Password
-                        passwordRef={passwordRef}
+                        // passwordRef={passwordRef}
+                        password={password}
+                        setPassword={setPassword}
                         passwordComplete={passwordComplete}
                         setPasswordComplete={setPasswordComplete}
                     />

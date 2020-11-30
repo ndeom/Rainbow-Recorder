@@ -13,38 +13,37 @@ import "./Register.scss";
 const testDelay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 export default function Register() {
-    const usernameRef = useRef("");
-    const passwordRef = useRef("");
-    const retypePasswordRef = useRef("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [retypePassword, setRetypePassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [usernameValErr, setUsernameValErr] = useState("");
-    const [passwordValErr, setPasswordValErr] = useState("");
-    const [retypePasswordValErr, setRetypePasswordValErr] = useState("");
+    // const [usernameValErr, setUsernameValErr] = useState("");
+    // const [passwordValErr, setPasswordValErr] = useState("");
+    const [retypePasswordValErr, setRetypePasswordValErr] = useState(false);
     const [submissionError, setSubmissionError] = useState("");
 
     const history = useHistory();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setLoading(true);
-
-        const credentials = {
-            username: usernameRef.current,
-            password: passwordRef.current,
-        };
-
-        try {
-            const responseBody = await registerUser(credentials);
-            setLoading(false);
-            if (responseBody.error) {
-                setSubmissionError(responseBody.error);
-            } else {
-                setSessionCookie();
-                history.push("/rainbow");
+        if (passwordsMatch) {
+            setLoading(true);
+            const credentials = { username, password };
+            try {
+                const responseBody = await registerUser(credentials);
+                setLoading(false);
+                if (responseBody.error) {
+                    setSubmissionError(responseBody.error);
+                } else {
+                    setSessionCookie();
+                    history.push("/rainbow");
+                }
+            } catch (err) {
+                console.error(`Attempted to submit form data and got error: ${err}`);
+                setLoading(false);
             }
-        } catch (err) {
-            console.error(`Attempted to submit form data and got error: ${err}`);
-            setLoading(false);
+        } else {
+            setRetypePasswordValErr(true);
         }
     };
 
@@ -52,11 +51,23 @@ export default function Register() {
     const [usernameComplete, setUsernameComplete] = useState(false);
     const [passwordComplete, setPasswordComplete] = useState(false);
     const [retypePasswordComplete, setRetypePasswordComplete] = useState(false);
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
 
     useEffect(() => {
-        if (usernameComplete && passwordComplete && retypePasswordComplete) setFormComplete(true);
-        if ((!usernameComplete || !passwordComplete || !retypePasswordComplete) && formComplete)
+        if (password === retypePassword) {
+            setPasswordsMatch(true);
+        } else if (passwordsMatch) {
+            setPasswordsMatch(false);
+        }
+        if (retypePasswordValErr) setRetypePasswordValErr(false);
+    }, [password, passwordsMatch, retypePassword, retypePasswordValErr]);
+
+    useEffect(() => {
+        if (usernameComplete && passwordComplete && retypePasswordComplete) {
+            setFormComplete(true);
+        } else if (formComplete) {
             setFormComplete(false);
+        }
     }, [formComplete, passwordComplete, retypePasswordComplete, usernameComplete]);
 
     return (
@@ -65,28 +76,33 @@ export default function Register() {
                 <Logo />
                 <form id="login-form" onSubmit={(e) => handleSubmit(e)}>
                     <Username
-                        usernameRef={usernameRef}
-                        usernameValErr={usernameValErr}
+                        username={username}
+                        setUsername={setUsername}
+                        // usernameValErr={usernameValErr}
                         usernameComplete={usernameComplete}
                         setUsernameComplete={setUsernameComplete}
                     />
                     <Password
-                        passwordRef={passwordRef}
-                        passwordValErr={passwordValErr}
+                        password={password}
+                        setPassword={setPassword}
+                        // passwordValErr={passwordValErr}
                         passwordComplete={passwordComplete}
                         setPasswordComplete={setPasswordComplete}
                     />
                     <RetypePassword
-                        passwordRef={retypePasswordRef}
+                        password={retypePassword}
+                        setPassword={setRetypePassword}
                         passwordValErr={retypePasswordValErr}
                         passwordComplete={retypePasswordComplete}
                         setPasswordComplete={setRetypePasswordComplete}
                         placeholder="Retype Password"
                     />
-                    {submissionError ? <SubmissionError submissionError={submissionError} /> : null}
+                    {submissionError ? <SubmissionError>{submissionError}</SubmissionError> : null}
+                    {retypePasswordValErr ? (
+                        <SubmissionError>Passwords do not match.</SubmissionError>
+                    ) : null}
                     <FormButton
                         children={"Sign Up"}
-                        // setSubmitForm={setSubmitForm}
                         loading={loading}
                         formComplete={formComplete}
                     />
@@ -98,13 +114,21 @@ export default function Register() {
     );
 }
 
-function SubmissionError({ submissionError }) {
+function SubmissionError({ children }) {
     return (
         <div id="submission-error">
-            <div>{submissionError}</div>
+            <div>{children}</div>
         </div>
     );
 }
+
+// function SubmissionError({ submissionError }) {
+//     return (
+//         <div id="submission-error">
+//             <div>{submissionError}</div>
+//         </div>
+//     );
+// }
 
 function RegisterModal() {
     return (

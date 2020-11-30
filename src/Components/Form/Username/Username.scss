@@ -1,16 +1,20 @@
 .input-container {
     position: relative;
     margin: 0px 40px 6px 40px;
-    width: 268px;
+    // width: 268px;
+    width: 326px;
 
     .form-label {
         color: gray;
-        font-size: 14px;
+        // font-size: 14px;
+        font-weight: 600;
         span {
             position: absolute;
-            left: 6px;
-            top: calc(50% - 9px);
+            // left: 6px;
+            left: 12px;
+            top: calc(50% - 10px);
             transition: top 150ms linear, font-size 150ms linear;
+            // z-index: -1;
 
             &.active {
                 top: 0px;
@@ -19,13 +23,19 @@
         }
 
         .form-input {
-            height: 36px;
+            // height: 36px;
+            height: 52px;
             width: 100%;
             box-sizing: border-box;
             border: 1px solid lightgray;
-            border-radius: 2px;
-            font-size: 14px;
-            padding: 0 6px;
+            // border-radius: 2px;
+            // border-radius: 0.75rem;
+            border-radius: 999px;
+            // background-color: rgba(255, 255, 255, 0);
+            // font-size: 14px;
+            font-size: 16px;
+            // padding: 0 6px;
+            padding: 0 12px;
             outline: none;
             transition: padding-top 150ms linear;
 

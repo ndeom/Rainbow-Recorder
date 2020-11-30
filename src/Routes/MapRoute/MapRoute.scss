@@ -1,8 +1,248 @@
 #map-route {
     overflow-x: hidden;
     overflow-y: hidden;
+    color: var(--color-text-primary);
     // width: 100vw;
     #map-route-body {
         display: flex;
+    }
+}
+
+#upload-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .dark-background {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    #upload-modal {
+        position: relative;
+        width: 480px;
+        background-color: white;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid lightgray;
+        // border-radius: 4px;
+        transition: height 200ms ease;
+
+        #modal-nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            // position: absolute;
+            // left: 0px;
+            // top: 0px;
+
+            button {
+                border: none;
+                background-color: white;
+                padding: 1em;
+                font-size: 16px;
+                font-weight: 600;
+                // color: gray;
+                color: var(--color-text-primary);
+                cursor: pointer;
+                transition: color 200ms ease;
+            }
+
+            #back-button:hover {
+                color: var(--primary-blue);
+            }
+
+            #next-button:hover {
+                color: var(--primary-blue);
+            }
+        }
+
+        #modal-close-container {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            align-self: flex-end;
+            // margin-bottom: 20px;
+            // margin: 10px 10px 20px 0px;
+            #modal-close {
+                border-radius: 100px;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                background-color: gray;
+                color: #eee;
+                border: none;
+                font-size: 18px;
+                // display: flex;
+                // justify-content: center;
+                // align-items: center;
+
+                &:hover {
+                    background-color: black;
+                }
+            }
+        }
+        #modal-drop {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-border-primary);
+
+            #modal-drop-label {
+                padding: 1em;
+                border: 3px dashed var(--color-border-primary);
+                background-color: var(--color-input-contrast-bg);
+                border-radius: 4px;
+                // font-size: 14px;
+                font-weight: 700;
+                // color: gray;
+                color: var(--color-text-primary);
+                &.active {
+                    border-color: var(--primary-blue);
+                }
+            }
+        }
+        #modal-actions {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            // margin-bottom: 20px;
+            #file-input,
+            #file-upload-button {
+                z-index: -1;
+                position: absolute;
+                opacity: 0;
+            }
+            label {
+                margin-bottom: 20px;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                // color: gray;
+                color: var(--color-text-primary);
+
+                display: flex;
+                align-items: center;
+                transition: color 200ms ease, fill 200ms ease;
+
+                &:hover {
+                    color: var(--primary-blue);
+                    svg {
+                        fill: var(--primary-blue);
+                    }
+                }
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                    // fill: gray;
+                    fill: var(--color-text-primary);
+                }
+            }
+            #modal-divider {
+                margin-bottom: 20px;
+                font-size: 14px;
+                font-weight: 700;
+                color: gray;
+            }
+            #modal-text-picker {
+                width: 50%;
+                #modal-paste-label {
+                    position: relative;
+                    width: 100%;
+                    span {
+                        position: absolute;
+                        display: none;
+                    }
+                    #modal-paste-input {
+                        width: 100%;
+                        height: 24px;
+                        font-size: 14px;
+                        text-align: center;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+
+        #submitted-image-container {
+            width: 100%;
+            // margin-top: 42px;
+            // margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            #submitted-image {
+                width: 100%;
+            }
+        }
+
+        #post-submission-error {
+            color: red;
+            font-size: 14px;
+        }
+
+        #post-inputs {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            // label {
+            //     width: 100%;
+            //     box-sizing: border-box;
+            #caption {
+                width: 100%;
+                height: 60px;
+                box-sizing: border-box;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                resize: none;
+            }
+            // }
+        }
+
+        #spinner-backdrop {
+            // background-color: black;
+            // opacity: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 4px;
+
+            margin: 60px 0px;
+            span {
+                // color: gray;
+                color: var(--color-text-primary);
+                font-weight: 600;
+            }
+            div.spinner {
+                height: 40px;
+                width: 40px;
+                opacity: 65%;
+
+                div {
+                    background-color: black;
+                }
+            }
+        }
     }
 }

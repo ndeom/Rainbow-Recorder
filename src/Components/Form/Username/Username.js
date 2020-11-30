@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Username.scss";
 
 export default function Username({
-    usernameRef,
+    username,
+    setUsername,
     usernameComplete,
     setUsernameComplete,
     placeholder,
 }) {
-    const [username, setUsername] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-    // const [fieldComplete, setFieldComplete] = useState(false);
+
+    const inputRef = useRef();
+    const focusInput = () => inputRef.current.focus();
 
     useEffect(() => {
         if (isFocused && username.length !== 0) setIsActive(true);
@@ -25,14 +27,14 @@ export default function Username({
     return (
         <div className="input-container">
             <label htmlFor="username" id="username-label" className="form-label">
-                <span className={isActive ? "active" : ""}>{placeholder || "Username"}</span>
+                <span className={isActive ? "active" : ""} onClick={focusInput}>
+                    {placeholder || "Username"}
+                </span>
                 <input
-                    onChange={(e) => {
-                        setUsername(e.target.value);
-                        usernameRef.current = e.target.value;
-                    }}
+                    onChange={(e) => setUsername(e.target.value)}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
+                    ref={inputRef}
                     name="username"
                     className={`form-input ${isActive ? "active" : ""}`}
                     type="text"
