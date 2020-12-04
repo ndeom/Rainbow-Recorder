@@ -1,24 +1,59 @@
-div#login {
+.login {
     width: 100vw;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+    position: relative;
     // background-color: #eee;
     // border-radius: 8px;
 
-    .form-container {
-        border: 1px solid lightgray;
+    $inner-margin: 10%;
+
+    .logo-column {
+        flex: 1;
+        z-index: 1;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-        border-radius: 0.75rem;
-        margin-bottom: 10px;
+        height: 100vh;
+        align-items: flex-start;
+        justify-content: center;
 
         .form-logo-container {
-            left: -22px;
+            margin-right: $inner-margin;
+            margin-top: 10%;
+        }
+    }
+
+    .form-column {
+        flex: 1;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+        align-items: flex-start;
+
+        .form-container {
+            // width: 420px;
+            margin-left: $inner-margin;
+            // border: 1px solid lightgray;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20%;
+            z-index: 1;
+
+            #login-form {
+                background-color: white;
+                border-radius: 0.75rem;
+                padding: 24px 0;
+                margin-bottom: 12px;
+            }
+
+            // .form-logo-container {
+            //     left: -22px;
+            // }
         }
     }
 }
@@ -34,6 +69,7 @@ div#login {
 }
 
 #sign-up-modal {
+    color: var(--color-text-primary);
     background-color: white;
     // width: 268px;
     box-sizing: border-box;
@@ -42,7 +78,8 @@ div#login {
     justify-content: center;
     align-items: center;
     border-radius: 0.75rem;
-
+    // width: 420px;
+    //
     p {
         display: flex;
         justify-content: center;
@@ -60,4 +97,19 @@ div#login {
             margin-left: 2px;
         }
     }
+}
+
+.wavy-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 0;
+    // transform: scaleX(-1);
+    // fill: white;
+    // fill: #454a55;
+    fill: #3a3e49;
+
+    // fill: var(--primary-blue);
 }

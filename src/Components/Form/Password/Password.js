@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import LoginTooltip from "Components/LoginTooltip/LoginTooltip";
 import "./Password.scss";
 
 export default function Password({
@@ -7,6 +8,7 @@ export default function Password({
     passwordComplete,
     setPasswordComplete,
     placeholder,
+    submissionError,
 }) {
     const [isActive, setIsActive] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -26,7 +28,14 @@ export default function Password({
 
     return (
         <div className="input-container">
-            <label htmlFor="password" className="form-label">
+            <label
+                htmlFor="password"
+                className={`form-label ${
+                    submissionError === "password length" || submissionError === "password mismatch"
+                        ? "error"
+                        : ""
+                }`}
+            >
                 <span className={isActive ? "active" : ""} onClick={focusInput}>
                     {placeholder || "Password"}
                 </span>
@@ -39,6 +48,14 @@ export default function Password({
                     className={`form-input ${isActive ? "active" : ""}`}
                     type="password"
                 ></input>
+                {submissionError === "password length" ||
+                submissionError === "password mismatch" ? (
+                    <LoginTooltip>
+                        {submissionError === "password length"
+                            ? "Password incomplete."
+                            : "Password did not match records."}
+                    </LoginTooltip>
+                ) : null}
             </label>
         </div>
     );

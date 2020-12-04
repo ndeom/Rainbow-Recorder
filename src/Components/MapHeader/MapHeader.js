@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
-import Logo from "Components/Form/Logo/Logo";
+import { useHistory, Link } from "react-router-dom";
 import { SessionContext } from "Components/SessionContext";
 import { ReactComponent as Rainbow } from "Images/rainbow.svg";
 import { ReactComponent as OptionsIcon } from "Images/gear-option.svg";
@@ -32,26 +31,26 @@ export default function MapHeader() {
 
 function HeaderTitle() {
     return (
-        <div id="title-box">
-            {/* <h1>Rainbow Recorder</h1> */}
-            <Rainbow id="title-rainbow" />
-            {/* <Logo /> */}
-            <h1>
-                <div>Rainbow</div>
-                <div>Recorder</div>
-            </h1>
-        </div>
+        <Link to="/rainbow">
+            <div id="title-box">
+                <Rainbow id="title-rainbow" />
+                <h1>
+                    <div>Rainbow</div>
+                    <div>Recorder</div>
+                </h1>
+            </div>
+        </Link>
     );
 }
 
 function HeaderAvatar({ menuActive, setMenuActive, avatarRef }) {
     const { session } = useContext(SessionContext);
-    const [username, setUsername] = useState("");
+    // const [username, setUsername] = useState("");
 
-    useEffect(() => {
-        console.log("session: ", session);
-        if (session && session.username) setUsername(session.username);
-    }, [session, session.username]);
+    // useEffect(() => {
+    //     console.log("session: ", session);
+    //     if (session && session.username) setUsername(session.username);
+    // }, [session, session.username]);
 
     const handleToggle = () => {
         setMenuActive((prevMenuActive) => !prevMenuActive);
@@ -59,7 +58,7 @@ function HeaderAvatar({ menuActive, setMenuActive, avatarRef }) {
 
     return (
         <div className="avatar" onClick={handleToggle} ref={avatarRef}>
-            <Avatar /> <span>{username}</span>
+            <Avatar /> <span>{session.screenName || session.username || ""}</span>
         </div>
     );
 }

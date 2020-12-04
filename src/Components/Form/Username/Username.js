@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+import StatusTooltip from "Components/StatusTooltip/StatusTooltip";
+import LoginTooltip from "Components/LoginTooltip/LoginTooltip";
 import "./Username.scss";
 
 export default function Username({
@@ -7,6 +10,7 @@ export default function Username({
     usernameComplete,
     setUsernameComplete,
     placeholder,
+    submissionError,
 }) {
     const [isActive, setIsActive] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -26,7 +30,15 @@ export default function Username({
 
     return (
         <div className="input-container">
-            <label htmlFor="username" id="username-label" className="form-label">
+            <label
+                htmlFor="username"
+                id="username-label"
+                className={`form-label ${
+                    submissionError === "username length" || submissionError === "username mismatch"
+                        ? "error"
+                        : ""
+                }`}
+            >
                 <span className={isActive ? "active" : ""} onClick={focusInput}>
                     {placeholder || "Username"}
                 </span>
@@ -38,7 +50,16 @@ export default function Username({
                     name="username"
                     className={`form-input ${isActive ? "active" : ""}`}
                     type="text"
+                    autoComplete="off"
                 ></input>
+                {submissionError === "username length" ||
+                submissionError === "username mismatch" ? (
+                    <LoginTooltip>
+                        {submissionError === "username length"
+                            ? "Must enter username."
+                            : "Username did not match records."}
+                    </LoginTooltip>
+                ) : null}
             </label>
         </div>
     );

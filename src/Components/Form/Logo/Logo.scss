@@ -7,36 +7,33 @@
     align-items: center;
     position: relative;
 
+    // h1 {
+    //     color: white;
+    // }
+
     .form-logo {
-        // font-size: 28px;
         font-size: 36px;
-        // font-weight: 400;
-        font-family: "Lobster", cursive;
-        // font-family: "Montserrat", sans-serif;
-        // font-weight: 900;
-        // font-family: "Oleo Script Swash Caps", cursive;
-        // font-weight: 700;
+        color: var(--color-text-primary);
+        font-family: var(--logo-font);
         margin-right: 8px;
         position: absolute;
         bottom: -0.25em;
         right: -1em;
         line-height: 95%;
-        filter: drop-shadow(0px 0px 40px white);
+        // filter: drop-shadow(0px 0px 40px white);
 
-        // box-shadow: 0px 0px 10px 10px white;
-
-        div:nth-child(1)::before,
-        div:nth-child(2)::before {
-            content: "";
-            position: absolute;
-            width: 80%;
-            height: 30px;
-            top: 15%;
-            left: 10%;
-            background-color: white;
-            z-index: -1;
-            box-shadow: 0px 0px 10px 10px white;
-        }
+        // div:nth-child(1)::before,
+        // div:nth-child(2)::before {
+        //     content: "";
+        //     position: absolute;
+        //     width: 80%;
+        //     height: 30px;
+        //     top: 15%;
+        //     left: 10%;
+        //     background-color: white;
+        //     z-index: -1;
+        //     box-shadow: 0px 0px 10px 10px white;
+        // }
 
         div:nth-child(2) {
             position: relative;
@@ -45,8 +42,20 @@
     }
 
     .form-rainbow {
-        // width: 48px;
-        width: 200px;
+        width: 300px;
         height: auto;
+    }
+
+    .cloud {
+        position: absolute;
+        fill: white;
+        width: 240px;
+        height: auto;
+        fill-rule: nonzero;
+        right: -76px;
+        bottom: -46px;
+        // filter: drop-shadow(0px 0px 1px black);
+        // stroke: black;
+        // stroke-width: 2px;
     }
 }

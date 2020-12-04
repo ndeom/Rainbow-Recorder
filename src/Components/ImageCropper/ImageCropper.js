@@ -1,8 +1,8 @@
 import React from "react";
 import Cropper from "react-easy-crop";
 
-export default function ImageCropper({ inputImg }) {
-    const [blob, setBlob] = React.useState(null);
+export default function ImageCropper({ inputImg, blob, setBlob }) {
+    // const [blob, setBlob] = React.useState(null);
     // const [inputImg, setInputImg] = React.useState("");
 
     const getBlob = (blob) => setBlob(blob);
@@ -66,8 +66,10 @@ export const getCroppedImg = async (imageSrc, crop) => {
     );
 
     return new Promise((resolve) => {
-        canvas.toBlob((blob) => {
-            resolve(blob);
-        }, "image/jpeg");
+        const blob = canvas.toDataURL("image/jpeg", 1.0);
+        resolve(blob);
+        // canvas.toBlob((blob) => {
+        //     resolve(blob);
+        // }, "image/jpeg");
     });
 };

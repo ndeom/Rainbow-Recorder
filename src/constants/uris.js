@@ -6,6 +6,7 @@ export const uri = {
     register: baseURI + "/api/users/register",
     refresh: baseURI + "/api/users/refresh",
     changeUsername: baseURI + "/api/users/username",
+    changeScreenName: baseURI + "/api/users/screenname",
     changePassword: baseURI + "/api/users/password",
     getPosts: baseURI + "/api/posts",
     getSinglePost: baseURI + "/api/posts/singlepost",

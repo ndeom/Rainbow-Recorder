@@ -252,9 +252,11 @@ function ModalNav({ image, setImage, setModalToggled, handleSubmit }) {
             <button id="back-button" onClick={handleClickBack}>
                 {image ? "Back" : "Exit"}
             </button>
-            <button id="next-button" onClick={handleClickNext}>
-                {image ? "Post" : ""}
-            </button>
+            {image ? (
+                <button id="next-button" onClick={handleClickNext}>
+                    Post
+                </button>
+            ) : null}
         </div>
     );
 }
@@ -338,59 +340,59 @@ const mapProps = {
     className: "map-box",
 };
 
-const defaultPosts = [
-    {
-        id: 1,
-        username: "some guy",
-        caption: "this is some guy's caption",
-        timestamp: 1603307171,
-        coord: { lat: 38.9072, lng: 283 },
-        photo: "someamazonbucketurl.com/something",
-        likes: 4,
-        comments: [
-            {
-                username: "userOne",
-                comment: "wowee this looks great",
-            },
-            {
-                username: "userTwo",
-                comment: "man I love rainbows",
-            },
-        ],
-    },
-    {
-        id: 2,
-        username: "some guy's friend",
-        caption: "this is some guy's friend's caption",
-        timestamp: 1603307160,
-        coord: { lat: 40, lng: 250 },
-        photo: "someamazonbucketurl.com/something",
-        likes: 4,
-        comments: [
-            {
-                username: "userThree",
-                comment: "take better pictures nub",
-            },
-            {
-                username: "userFour",
-                comment: "ewww",
-            },
-        ],
-    },
-    {
-        id: 3,
-        username: "some guy",
-        caption:
-            "this is a super long caption about absolutely nothing weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-        timestamp: 1603306171,
-        coord: { lat: 35, lng: 274 },
-        photo: "someamazonbucketurl.com/something",
-        likes: 40,
-        comments: [
-            {
-                username: "userFive",
-                comment: "the best",
-            },
-        ],
-    },
-];
+// const defaultPosts = [
+//     {
+//         id: 1,
+//         username: "some guy",
+//         caption: "this is some guy's caption",
+//         timestamp: 1603307171,
+//         coord: { lat: 38.9072, lng: 283 },
+//         photo: "someamazonbucketurl.com/something",
+//         likes: 4,
+//         comments: [
+//             {
+//                 username: "userOne",
+//                 comment: "wowee this looks great",
+//             },
+//             {
+//                 username: "userTwo",
+//                 comment: "man I love rainbows",
+//             },
+//         ],
+//     },
+//     {
+//         id: 2,
+//         username: "some guy's friend",
+//         caption: "this is some guy's friend's caption",
+//         timestamp: 1603307160,
+//         coord: { lat: 40, lng: 250 },
+//         photo: "someamazonbucketurl.com/something",
+//         likes: 4,
+//         comments: [
+//             {
+//                 username: "userThree",
+//                 comment: "take better pictures nub",
+//             },
+//             {
+//                 username: "userFour",
+//                 comment: "ewww",
+//             },
+//         ],
+//     },
+//     {
+//         id: 3,
+//         username: "some guy",
+//         caption:
+//             "this is a super long caption about absolutely nothing weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+//         timestamp: 1603306171,
+//         coord: { lat: 35, lng: 274 },
+//         photo: "someamazonbucketurl.com/something",
+//         likes: 40,
+//         comments: [
+//             {
+//                 username: "userFive",
+//                 comment: "the best",
+//             },
+//         ],
+//     },
+// ];

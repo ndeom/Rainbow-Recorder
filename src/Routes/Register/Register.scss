@@ -1,22 +1,60 @@
-#login {
+.register {
     width: 100vw;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+    position: relative;
     // background-color: #eee;
+    // border-radius: 8px;
 
-    .form-container {
-        border: 1px solid lightgray;
+    $inner-margin: 10%;
+
+    .logo-column {
+        flex: 1;
+        z-index: 1;
+        display: flex;
+        height: 100vh;
+        align-items: flex-start;
+        justify-content: center;
+
+        .form-logo-container {
+            margin-right: $inner-margin;
+            margin-top: 10%;
+        }
+    }
+
+    .form-column {
+        flex: 1;
+        z-index: 1;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        background-color: white;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.2), 0px 2px 4px 0px rgba(0, 0, 0, 0.1),
-            inset 0px 0px 0px 1px rgba(255, 255, 255, 0.5);
+        height: 100vh;
+        justify-content: center;
+        align-items: flex-start;
+
+        .form-container {
+            // width: 420px;
+            margin-left: $inner-margin;
+            // border: 1px solid lightgray;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20%;
+            z-index: 1;
+
+            #login-form {
+                background-color: white;
+                border-radius: 0.75rem;
+                padding: 24px 0;
+                margin-bottom: 12px;
+            }
+
+            // .form-logo-container {
+            //     left: -22px;
+            // }
+        }
     }
 }
 
@@ -31,6 +69,7 @@
 }
 
 #sign-up-modal {
+    color: var(--color-text-primary);
     background-color: white;
     // width: 268px;
     box-sizing: border-box;
@@ -38,9 +77,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.2), 0px 2px 4px 0px rgba(0, 0, 0, 0.1),
-        inset 0px 0px 0px 1px rgba(255, 255, 255, 0.5);
-
+    border-radius: 0.75rem;
+    // width: 420px;
+    //
     p {
         display: flex;
         justify-content: center;
@@ -59,3 +98,80 @@
         }
     }
 }
+
+.wavy-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 0;
+    // transform: scaleX(-1);
+    // fill: white;
+    // fill: #454a55;
+    fill: #3a3e49;
+
+    // fill: var(--primary-blue);
+}
+
+// #login {
+//     width: 100vw;
+//     min-height: 100vh;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     // background-color: #eee;
+
+//     .form-container {
+//         border: 1px solid lightgray;
+//         display: flex;
+//         flex-direction: column;
+//         align-items: center;
+//         background-color: white;
+//         border-radius: 8px;
+//         margin-bottom: 10px;
+//         box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.2), 0px 2px 4px 0px rgba(0, 0, 0, 0.1),
+//             inset 0px 0px 0px 1px rgba(255, 255, 255, 0.5);
+//     }
+// }
+
+// #submission-error {
+//     color: red;
+//     div {
+//         margin: 20px 40px;
+//         width: 268px;
+//         text-align: center;
+//         font-size: 14px;
+//     }
+// }
+
+// #sign-up-modal {
+//     background-color: white;
+//     // width: 268px;
+//     box-sizing: border-box;
+//     border: 1px solid lightgray;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.2), 0px 2px 4px 0px rgba(0, 0, 0, 0.1),
+//         inset 0px 0px 0px 1px rgba(255, 255, 255, 0.5);
+
+//     p {
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         margin: 20px 40px;
+//         // width: 268px;
+//         width: 326px;
+//         // font-size: 14px;
+//         font-size: 16px;
+
+//         a {
+//             text-decoration: none;
+//             color: #0095f6;
+//             font-weight: 600;
+//             margin-left: 2px;
+//         }
+//     }
+// }

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 :root {
     --primary-blue: #0095f6;
     --primary-blue-hover: #0086df;
@@ -7,6 +9,16 @@
     --color-state-focus-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
     --color-text-primary: #24292e;
     --color-border-primary: #e1e4e8;
+
+    --color-input-tooltip-success-text: #144620;
+    --color-input-tooltip-success-bg: #dcffe4;
+    --color-input-tooltip-success-border: #34d058;
+    --color-input-tooltip-error-text: #86181d;
+    --color-input-tooltip-error-bg: #ffeef0;
+    --color-input-tooltip-error-border: #f97583;
+    --color-text-danger: #cb2431;
+
+    --logo-font: "Pacifico", cursive;
 }
 
 .App {

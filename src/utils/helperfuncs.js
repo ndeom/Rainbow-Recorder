@@ -320,13 +320,78 @@ export const postComment = async (newComment) => {
     }
 };
 
-export const resetPassword = async (newPassword) => {
+export const resetPassword = async (userID, oldPassword, newPassword) => {
     try {
         const response = await makePutRequest({
             url: uri.changePassword,
-            bodyContent: newPassword,
+            bodyContent: { userID, oldPassword, newPassword },
         });
         return response;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const checkUsernameAvailability = async (username) => {
+    const fetchUrl = uri.getUsers + `?username=${username}`;
+    try {
+        const response = await makeGetRequst(fetchUrl);
+        console.log("respons in check username: ", response);
+        const body = await response.json();
+        return body;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const updateUsername = async (userID, newUsername) => {
+    try {
+        const response = await makePutRequest({
+            url: uri.changeUsername,
+            bodyContent: { userID, newUsername },
+        });
+        const body = response.json();
+        return body;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const updateScreenName = async (userID, screenName) => {
+    try {
+        const response = await makePutRequest({
+            url: uri.changeScreenName,
+            bodyContent: { userID, screenName },
+        });
+        const body = response.json();
+        return body;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const refreshToken = async (userID, username) => {
+    try {
+        const response = await makePostRequest({
+            url: uri.refresh,
+            bodyContent: { userID, username },
+        });
+        const body = response.json();
+        return body;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const submitProfilePicture = async (userID, blob) => {
+    try {
+        const timestamp = new Date(Date.now());
+        const response = await makePostRequest({
+            url: uri.profilePicture,
+            bodyContent: { userID, timestamp, blob },
+        });
+        const body = response.json();
+        return body;
     } catch (err) {
         throw err;
     }
@@ -349,6 +414,34 @@ const makePutRequest = async ({ url, bodyContent }) => {
     }
 };
 
-const makeGetRequst = async () => {};
+const makeGetRequst = async (fetchUrl) => {
+    try {
+        const response = await fetch(fetchUrl, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+            },
+        });
+        return response;
+    } catch (err) {
+        throw err;
+    }
+};
 
-const makePostRequest = async () => {};
+const makePostRequest = async ({ url, bodyContent }) => {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bodyContent),
+        });
+        return response;
+    } catch (err) {
+        throw err;
+    }
+};

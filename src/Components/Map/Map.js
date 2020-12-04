@@ -257,23 +257,23 @@ function UnconfirmRainbowButton({
     );
 }
 
-const defaultOptions = {
-    center: { lat: 38.9072, lng: 283 },
-    zoom: 7,
-    mapTypeControl: false,
-    // zoomControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-};
+// const defaultOptions = {
+//     center: { lat: 38.9072, lng: 283 },
+//     zoom: 7,
+//     mapTypeControl: false,
+//     // zoomControl: false,
+//     streetViewControl: false,
+//     fullscreenControl: false,
+// };
 
-function shouldNotUpdate(props, nextProps) {
-    const [funcs, nextFuncs] = [functions(props), functions(nextProps)];
-    const noPropChange = isEqual(omit(props, funcs), omit(nextProps, nextFuncs));
-    const noFuncChange =
-        funcs.length === nextFuncs.length &&
-        funcs.every((func) => props[func].toString() === nextProps[func].toString());
-    return noPropChange && noFuncChange;
-}
+// function shouldNotUpdate(props, nextProps) {
+//     const [funcs, nextFuncs] = [functions(props), functions(nextProps)];
+//     const noPropChange = isEqual(omit(props, funcs), omit(nextProps, nextFuncs));
+//     const noFuncChange =
+//         funcs.length === nextFuncs.length &&
+//         funcs.every((func) => props[func].toString() === nextProps[func].toString());
+//     return noPropChange && noFuncChange;
+// }
 
 function addMapMarkers(map, posts) {
     const rainbowIcon = {
@@ -334,53 +334,53 @@ function addRainbowMarkers(map, coordinates) {
     return markers;
 }
 
-const defaultCoordinates = [
-    {
-        coord: { lat: 38.9072, lng: 283 },
-        title: "sample title",
-        id: 1,
-    },
-    {
-        coord: { lat: 40, lng: 250 },
-        title: "sample title",
-        id: 2,
-    },
-    {
-        coord: { lat: 35, lng: 274 },
-        title: "sample title",
-        id: 3,
-    },
-    {
-        coord: { lat: 30, lng: 240 },
-        title: "sample title",
-        id: 4,
-    },
-    {
-        coord: { lat: 32, lng: 250 },
-        title: "sample title",
-        id: 5,
-    },
-    {
-        coord: { lat: 38, lng: 230 },
-        title: "sample title",
-        id: 6,
-    },
-    {
-        coord: { lat: 29, lng: 240 },
-        title: "sample title",
-        id: 7,
-    },
-    {
-        coord: { lat: 34, lng: 245 },
-        title: "sample title",
-        id: 8,
-    },
-    {
-        coord: { lat: 41, lng: 280 },
-        title: "sample title",
-        id: 9,
-    },
-];
+// const defaultCoordinates = [
+//     {
+//         coord: { lat: 38.9072, lng: 283 },
+//         title: "sample title",
+//         id: 1,
+//     },
+//     {
+//         coord: { lat: 40, lng: 250 },
+//         title: "sample title",
+//         id: 2,
+//     },
+//     {
+//         coord: { lat: 35, lng: 274 },
+//         title: "sample title",
+//         id: 3,
+//     },
+//     {
+//         coord: { lat: 30, lng: 240 },
+//         title: "sample title",
+//         id: 4,
+//     },
+//     {
+//         coord: { lat: 32, lng: 250 },
+//         title: "sample title",
+//         id: 5,
+//     },
+//     {
+//         coord: { lat: 38, lng: 230 },
+//         title: "sample title",
+//         id: 6,
+//     },
+//     {
+//         coord: { lat: 29, lng: 240 },
+//         title: "sample title",
+//         id: 7,
+//     },
+//     {
+//         coord: { lat: 34, lng: 245 },
+//         title: "sample title",
+//         id: 8,
+//     },
+//     {
+//         coord: { lat: 41, lng: 280 },
+//         title: "sample title",
+//         id: 9,
+//     },
+// ];
 
 // export default memo(Map, shouldNotUpdate);
 export default Map;

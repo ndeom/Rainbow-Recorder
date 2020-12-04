@@ -1,0 +1,10 @@
+<svg viewBox="0 0 1440 561" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Fill pattern -->
+<!-- <defs>
+    <pattern id="pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse" >
+        <circle cx="20" cy="20" r="20" fill="#3a3e49" ></circle>
+    </pattern>
+</defs> -->
+
+<path d="M714.5 504.5C645.209 479.817 332.616 360.772 0 520.817V0H1440V426.23C1080.38 653.586 783.791 529.183 714.5 504.5Z"/>
+</svg>
