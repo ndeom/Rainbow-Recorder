@@ -187,6 +187,8 @@ export const unlikePost = async (userID, postID) => {
 export const extractJWTPayload = () => {
     console.log("extracting payload");
     const jwtFragment = Cookies.get("fragmentOne");
+    const cookies = document.cookie;
+    console.log("cookies: ", cookies);
     console.log("jwtFragment: ", jwtFragment);
     return JSON.parse(window.atob(jwtFragment.split(".")[1]));
 };
