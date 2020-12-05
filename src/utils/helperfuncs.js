@@ -186,9 +186,8 @@ export const unlikePost = async (userID, postID) => {
 
 export const extractJWTPayload = () => {
     console.log("extracting payload");
-
     const jwtFragment = Cookies.get("fragmentOne");
-    if (!jwtFragment) console.log("jwtFragment is undefined");
+    // if (jwtFragment === undefined) console.log("jwtFragment is undefined");
     return JSON.parse(window.atob(jwtFragment.split(".")[1]));
 };
 
