@@ -190,6 +190,7 @@ export const extractJWTPayload = () => {
     const cookies = document.cookie;
     console.log("cookies: ", cookies);
     console.log("jwtFragment: ", jwtFragment);
+    if (jwtFragment === undefined) return {};
     return JSON.parse(window.atob(jwtFragment.split(".")[1]));
 };
 
