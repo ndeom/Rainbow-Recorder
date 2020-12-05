@@ -187,13 +187,14 @@ export const unlikePost = async (userID, postID) => {
 export const extractJWTPayload = () => {
     console.log("extracting payload");
     const jwtFragment = Cookies.get("fragmentOne");
-    // if (jwtFragment === undefined) console.log("jwtFragment is undefined");
+    console.log("jwtFragment: ", jwtFragment);
     return JSON.parse(window.atob(jwtFragment.split(".")[1]));
 };
 
 export const setSessionCookie = () => {
     Cookies.remove("session");
     const payload = extractJWTPayload();
+    console.log("payload: ", payload);
     Cookies.set("session", payload, { expires: 14 });
 };
 
