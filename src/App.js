@@ -26,6 +26,7 @@ function App() {
     // 3) page reload      -> (not authenticated, no session, session cookie, token)
 
     const logIn = () => {
+        console.log("cookies: ", document.cookie);
         setSessionCookie();
         setSession(() => getSessionCookie());
         setIsAuthenticated(true);
