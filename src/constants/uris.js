@@ -1,4 +1,5 @@
-const baseURI = "http://localhost:3001";
+// const baseURI = "http://localhost:3001";
+const baseURI = "https://rainbow-recorder-api.herokuapp.com";
 
 export const uri = {
     getUsers: baseURI + "/api/users",

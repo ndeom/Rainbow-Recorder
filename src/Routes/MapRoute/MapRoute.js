@@ -50,7 +50,8 @@ export default function MapRoute() {
         if (window.google) {
             handleBoundChange()
                 .then((fetchedPosts) => {
-                    if (fetchedPosts && fetchedPosts.posts.length) {
+                    // * Make sure this has no other effects
+                    if (fetchedPosts?.posts?.length) {
                         if (posts.length) {
                             for (let post of fetchedPosts.posts) {
                                 if (
