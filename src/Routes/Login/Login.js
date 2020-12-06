@@ -8,7 +8,7 @@ import FormButton from "Components/Form/Button/Button";
 import RainbowBackground from "Components/RainbowBackground/RainbowBackground";
 import { ReactComponent as WavyBackSVG } from "Images/WavyBackground.svg";
 import { Link } from "react-router-dom";
-import { signIn, setSessionCookie } from "utils/helperfuncs";
+import { signIn, setSessionCookie, setToken, setUserSession } from "utils/helperfuncs";
 // import "./Login.scss";
 import "./LoginAlt.scss";
 
@@ -41,6 +41,8 @@ export default function Login() {
             try {
                 const responseBody = await signIn(credentials);
                 if (responseBody.error === undefined) {
+                    setToken(responseBody.token);
+                    setUserSession(responseBody.userInfo);
                     logIn();
                 } else {
                     handleSubmissionError(responseBody.error);

@@ -105,17 +105,7 @@ export function PostModal({ post, setExpandedPost }) {
 
     const [refetchedPost, setRefetchedPost] = useState();
     useEffect(() => {
-        const fetchModalPost = async () => {
-            let response = await fetchSinglePost(post.post_id);
-            if (response.status === 401) {
-                await signInFromSession();
-                response = await fetchSinglePost(post.post_id);
-            }
-            console.log("response: ", response);
-            const fetchedPost = await response.json();
-            return fetchedPost.post;
-        };
-        fetchModalPost()
+        fetchSinglePost(post.post_id)
             .then((fetchedPost) => {
                 console.log("fetchedPost: ", fetchedPost);
                 setRefetchedPost(fetchedPost);
@@ -124,7 +114,7 @@ export function PostModal({ post, setExpandedPost }) {
                 setPostComments(fetchedPost.comments);
             })
             .catch((err) => console.error(`Error ocurred while fetching post: ${err}`));
-    }, []);
+    }, [post.post_id, session.user_id]);
 
     const [comment, setComment] = useState("");
     const [focusInput, setFocusInput] = useState(false);

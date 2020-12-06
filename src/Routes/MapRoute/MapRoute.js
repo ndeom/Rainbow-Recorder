@@ -33,13 +33,9 @@ export default function MapRoute() {
 
     const handleBoundChange = useCallback(async () => {
         try {
-            let response = await fetchPostsInBounds(mapBounds);
-            console.log("posts fetched");
-            if (response.status === 401) {
-                await signInFromSession();
-                response = await fetchPostsInBounds(mapBounds);
-            }
-            const fetchedPosts = await response.json();
+            console.log("fetching posts");
+            console.log("with map bounds: ", mapBounds);
+            const fetchedPosts = await fetchPostsInBounds(mapBounds);
             return fetchedPosts;
         } catch (err) {
             console.error(`Error ocurred while fetching posts: ${err}`);
@@ -47,7 +43,7 @@ export default function MapRoute() {
     }, [mapBounds]);
 
     useEffect(() => {
-        if (window.google) {
+        if (window.google && Object.keys(mapBounds).length) {
             handleBoundChange()
                 .then((fetchedPosts) => {
                     // * Make sure this has no other effects

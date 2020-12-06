@@ -8,7 +8,7 @@ import FormButton from "Components/Form/Button/Button";
 import RainbowBackground from "Components/RainbowBackground/RainbowBackground";
 import { ReactComponent as WavyBackSVG } from "Images/WavyBackground.svg";
 import { Link } from "react-router-dom";
-import { registerUser } from "utils/helperfuncs";
+import { registerUser, setUserSession, setToken } from "utils/helperfuncs";
 import "./Register.scss";
 import { SessionContext } from "Components/SessionContext";
 
@@ -40,6 +40,8 @@ export default function Register() {
             try {
                 const responseBody = await registerUser(credentials);
                 if (responseBody.error === undefined) {
+                    setToken(responseBody.token);
+                    setUserSession(responseBody.userInfo);
                     logIn();
                 } else {
                     handleSubmissionError(responseBody.error);

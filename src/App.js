@@ -8,6 +8,9 @@ import ResetPassword from "Routes/ResetPassword/ResetPassword";
 import MapRoute from "Routes/MapRoute/MapRoute";
 import UserProfileRoute from "Routes/UserProfile/UserProfile";
 import {
+    setSessionFromToken,
+    getStoredSession,
+    removeStoredSession,
     getSessionCookie,
     setSessionCookie,
     removeSessionCookie,
@@ -26,27 +29,30 @@ function App() {
     // 3) page reload      -> (not authenticated, no session, session cookie, token)
 
     const logIn = () => {
-        console.log("cookies: ", document.cookie);
-        setSessionCookie();
-        setSession(() => getSessionCookie());
+        // setSessionCookie();
+        // setSession(() => getSessionCookie());
+        console.log("logging in");
+        setSession(() => getStoredSession());
         setIsAuthenticated(true);
         history.push("/rainbow");
     };
 
     const logOut = () => {
-        removeSessionCookie();
+        // removeSessionCookie();
+        removeStoredSession();
         setIsAuthenticated(false);
         history.push("/");
     };
 
     useEffect(() => {
-        const storedSession = getSessionCookie();
+        // const storedSession = getSessionCookie();
+        const storedSession = getStoredSession();
         if (isAuthenticated) {
             // If session cookie expires after 14 days and page reloaded
-            if (storedSession.exp === undefined) setIsAuthenticated(false);
+            // if (storedSession.exp === undefined) setIsAuthenticated(false);
         } else {
             // Login, register, or hard page reload
-            if (session === null && storedSession.exp !== undefined) {
+            if (session === null && storedSession?.exp !== undefined) {
                 setIsAuthenticated(true);
                 console.log("session has been set ");
                 setSession(storedSession);
