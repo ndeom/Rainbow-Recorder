@@ -433,7 +433,7 @@ function ResetPassword() {
                         <StatusTooltip status="error">Passwords need to match.</StatusTooltip>
                     ) : null}
                 </div>
-                <button className="profile-button">
+                <button className={`profile-button ${loading ? "disabled" : ""}`}>
                     {loading ? "Resetting..." : "Reset password"}
                 </button>
             </form>
