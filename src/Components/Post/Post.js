@@ -37,10 +37,10 @@ export default function Post({ index, post, setExpandedPost, selectedMarker, sel
     const handleLike = () => {
         setLiked(!liked);
         if (liked) {
-            unlikePost(post.user_id, post.post_id);
+            unlikePost(session.user_id, post.post_id);
             setPostLikes(+postLikes - 1);
         } else {
-            likePost(post.user_id, post.post_id);
+            likePost(session.user_id, post.post_id);
             setPostLikes(+postLikes + 1);
         }
     };

@@ -16,6 +16,8 @@ import {
     refreshToken,
     getSessionCookie,
     submitProfilePicture,
+    setUserSession,
+    getStoredSession,
 } from "utils/helperfuncs";
 import "./UserProfile.scss";
 
@@ -44,9 +46,9 @@ function UserProfileContent({ children }) {
         currentTab: "user information",
     });
 
-    const updateSession = () => {
-        setSessionCookie();
-        setSession(() => getSessionCookie());
+    const updateSession = (userInfo) => {
+        setUserSession(userInfo);
+        setSession(() => getStoredSession());
         window.location.reload();
     };
 
@@ -137,11 +139,8 @@ function UserCard() {
         if (promises.length !== 0) {
             setUpdating(true);
             Promise.all(promises.map((promise) => promise()))
-                .then((res) => {
-                    console.log("res: ", res);
-                    return refreshToken(session.user_id, username);
-                })
-                .then(() => updateSession())
+                .then(() => refreshToken(session.user_id, username))
+                .then(({ userInfo }) => updateSession(userInfo))
                 .catch((err) => {
                     setUpdating(false);
                     console.error("Error ocurred while updating profile: ", err.stack);
@@ -309,7 +308,7 @@ function ProfileImageCropModal({ inputImg, setInputImg }) {
         setSubmitting(true);
         submitProfilePicture(session.user_id, blob)
             .then(() => refreshToken(session.user_id, session.username))
-            .then(() => updateSession())
+            .then(({ userInfo }) => updateSession(userInfo))
             .catch((err) => {
                 setSubmitting(false);
                 console.error("Error while submitting image: ", err.stack);

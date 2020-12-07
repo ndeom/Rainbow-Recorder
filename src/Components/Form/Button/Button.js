@@ -7,7 +7,7 @@ export default function Button({ children, setSubmitForm, loading, formComplete 
         <div className="form-button-container">
             <button
                 type="submit"
-                className={`form-button ${loading ? "disabled" : ""}`}
+                className={`form-button ${loading ? "loading" : ""}`}
                 // onClick={() => setSubmitForm(true)}
                 // disabled={formComplete ? false : true}
             >
