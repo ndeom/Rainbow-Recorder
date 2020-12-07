@@ -99,7 +99,7 @@ function Map({
                             <span>{username}</span>
                         </header>
                         <img alt={`submitted by ${username} at ${timestamp}`} src={image} />
-                        <div>{`${Object.keys(likes).length} likes`}</div>
+                        <div>{`${likes && Object.keys(likes).length} likes`}</div>
                         <div>{`${(comments && comments.length) || 0} comments`}</div>
                     </div>
                 );
