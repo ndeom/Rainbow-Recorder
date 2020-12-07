@@ -99,8 +99,8 @@ function Map({
                             <span>{username}</span>
                         </header>
                         <img alt={`submitted by ${username} at ${timestamp}`} src={image} />
-                        <div>{`${likes && Object.keys(likes).length} likes`}</div>
-                        <div>{`${(comments && comments.length) || 0} comments`}</div>
+                        <div>{`${likes ? Object.keys(likes).length : 0} likes`}</div>
+                        <div>{`${comments ? comments.length : 0} comments`}</div>
                     </div>
                 );
                 const staticTemplate = ReactDOMServer.renderToStaticMarkup(contentTemplate);
