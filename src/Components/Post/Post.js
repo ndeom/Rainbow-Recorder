@@ -203,8 +203,16 @@ export function PostModal({ post, setExpandedPost }) {
 function Header({ post }) {
     return (
         <header className="post-header">
-            <Avatar /> <span>{post.username}</span>
+            <PostAvatar post={post} /> <span>{post.username}</span>
         </header>
+    );
+}
+
+function PostAvatar({ post }) {
+    return post.profile_picture ? (
+        <img alt="User avatar" src={post.profile_picture} />
+    ) : (
+        <AvatarIcon />
     );
 }
 
